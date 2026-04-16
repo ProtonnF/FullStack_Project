@@ -3,7 +3,7 @@ const axios = require("axios");
 async function runTest() {
     const studentEmail = "hani0024@algonquinlive.com";
     const testName = "getAll to show all product";
-    const url ="http://localhost:3000/products";
+    const url ="https://your-project-name.onrender.com/products";
 
     try {
         const response = await axios.get(url);
