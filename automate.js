@@ -1,7 +1,7 @@
 const { exec } = require("child_process");
 
 // Test files to run list
-const testFiles = ["test.js"];
+const testFiles = ["test.js", "test_teammate.js"];
 
 console.log("Starting Automated Tests....");
 
