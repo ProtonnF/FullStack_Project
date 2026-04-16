@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store Product Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f4f4f4;
+            line-height: 1.6;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        h2 {
+            color: #444;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+        }
+
+        form {
+            background: #fff;
+            margin-bottom: 25px;
+            padding: 20px;
+            border: 1px solid #bbb;
+            border-radius: 5px;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 2px;
+            font-weight: bold;
+        }
+
+        input,
+        button {
+            margin: 5px 0;
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #004494;
+        }
+
+        .get-all-btn {
+            background-color: #28a745;
+        }
+
+        .get-all-btn:hover {
+            background-color: #218838;
+        }
+
+        pre {
+            background: #333;
+            color: #fff;
+            padding: 15px;
+            overflow: auto;
+            border-radius: 5px;
+        }
+
+        footer {
+            margin-top: 40px;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Store Product Management</h1>
+
+    <!-- GET ALL BUTTON -->
+    <button class="get-all-btn" id="getAllBtn">Get All Products</button>
+
+    <h2>Add New Product</h2>
+    <form id="createProductForm">
+        <label>Store ID:</label>
+        <input type="text" id="storeId" required>
+
+        <label>Store Name:</label>
+        <input type="text" id="storeName" required>
+
+        <label>Product ID:</label>
+        <input type="text" id="productId" required>
+
+        <label>Product Name:</label>
+        <input type="text" id="productName" required>
+
+        <label>Price:</label>
+        <input type="number" step="0.01" id="price" required>
+
+        <button type="submit">Add Product</button>
+    </form>
+
+    <h2>Fetch Product by ID</h2>
+    <form id="getProductForm">
+        <label>Database ID (_id):</label>
+        <input type="text" id="getDbId" required>
+        <button type="submit">Fetch Product</button>
+    </form>
+
+    <h2>Update Product</h2>
+    <form id="updateProductForm">
+        <label>Database ID (_id):</label>
+        <input type="text" id="updateDbId" required>
+
+        <label>New Product Name:</label>
+        <input type="text" id="updateName">
+
+        <label>New Price:</label>
+        <input type="number" step="0.01" id="updatePrice">
+
+        <button type="submit">Update Product</button>
+    </form>
+
+    <h2>Delete Product</h2>
+    <form id="deleteProductForm">
+        <label>Database ID (_id):</label>
+        <input type="text" id="deleteDbId" required>
+        <button type="submit" style="background-color: #dc3545;">Delete Product</button>
+    </form>
+
+    <h2>Response Output</h2>
+    <pre id="jsonOutput">{}</pre>
+
+    <footer>
+        <p>Disclaimer: This website is student work for demonstration of web development skills only.</p>
+    </footer>
+
+    <script>
+        const output = document.getElementById('jsonOutput');
+        const apiBase = 'http://localhost:3000';
+
+        function showJSON(data) {
+            output.textContent = JSON.stringify(data, null, 2);
+        }
+
+        async function handleFetch(url, options) {
+            try {
+                const res = await fetch(url, options);
+                const data = await res.json();
+                showJSON(data);
+            } catch (err) {
+                showJSON({ error: "Server connection failed: " + err.message });
+            }
+        }
+
+        // GET ALL
+        document.getElementById('getAllBtn').addEventListener('click', () => {
+            handleFetch(`${apiBase}/products`);
+        });
+
+        // CREATE
+        document.getElementById('createProductForm').addEventListener('submit', e => {
+            e.preventDefault();
+            const body = {
+                storeId: document.getElementById('storeId').value,
+                storeName: document.getElementById('storeName').value,
+                productId: document.getElementById('productId').value,
+                productName: document.getElementById('productName').value,
+                price: document.getElementById('price').value
+            };
+            handleFetch(`${apiBase}/products`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+        });
+
+        // READ ONE
+        document.getElementById('getProductForm').addEventListener('submit', e => {
+            e.preventDefault();
+            const id = document.getElementById('getDbId').value;
+            handleFetch(`${apiBase}/products/${id}`);
+        });
+
+        // UPDATE
+        document.getElementById('updateProductForm').addEventListener('submit', e => {
+            e.preventDefault();
+            const id = document.getElementById('updateDbId').value;
+            const body = {};
+            const name = document.getElementById('updateName').value;
+            const price = document.getElementById('updatePrice').value;
+
+            if (name) body.productName = name;
+            if (price) body.price = price;
+
+            handleFetch(`${apiBase}/products/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+        });
+
+        //DELETE
+        document.getElementById('deleteProductForm').addEventListener('submit', e => {
+            e.preventDefault();
+            const id = document.getElementById('deleteDbId').value;
+            handleFetch(`${apiBase}/products/${id}`, { method: 'DELETE' });
+        });
+    </script>
+</body>
+
+</html>
