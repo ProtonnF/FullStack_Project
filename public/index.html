@@ -43,6 +43,14 @@
                 <button type="submit">Deploy to Cloud</button>
             </form>
 
+            <form id="getProductForm">
+                <h3>Fetch Single Product</h3>
+                <div class="form-group-grid">
+                    <div><label>Database _id</label><input type="text" id="getDbId" required></div>
+                </div>
+                <button type="submit" style="background-color: #64748b;">Fetch Product</button>
+            </form>
+
             <form id="updateProductForm">
                 <h3>Update Existing Product</h3>
                 <div class="form-group-grid">
@@ -72,7 +80,7 @@
 
     <script>
         const output = document.getElementById('jsonOutput');
-        const apiBase = ''; // Use relative path for Render deployment
+        const apiBase = ''; // relative path for Render deployment
 
         function showJSON(data) {
             output.textContent = JSON.stringify(data, null, 2);
@@ -85,7 +93,7 @@
                 const products = await res.json();
 
                 const gallery = document.getElementById('productGallery');
-                gallery.innerHTML = ''; // Clear gallery
+                gallery.innerHTML = '';
 
                 products.forEach(p => {
                     const card = document.createElement('div');
@@ -125,7 +133,20 @@
             });
             const data = await res.json();
             showJSON(data);
-            fetchProducts(); // Refresh gallery
+            fetchProducts();
+        });
+
+        // READ ONE (Fetch Single Product)
+        document.getElementById('getProductForm').addEventListener('submit', async e => {
+            e.preventDefault();
+            const id = document.getElementById('getDbId').value;
+            try {
+                const res = await fetch(`${apiBase}/products/${id}`);
+                const data = await res.json();
+                showJSON(data); // This shows just the one product in the JSON box
+            } catch (err) {
+                showJSON({ error: "Product not found or invalid ID" });
+            }
         });
 
         // UPDATE
