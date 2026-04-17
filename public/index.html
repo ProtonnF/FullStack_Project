@@ -20,7 +20,7 @@
         <section>
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h2 style="margin: 0;">Available Products</h2>
-                <button onclick="fetchProducts()" style="padding: 8px 15px;">Refresh Inventory</button>
+                <button onclick="fetchProducts()" style="padding: 8px 15px;">getAll Inventory</button>
             </div>
             <div id="productGallery" class="gallery-grid">
                 <!-- NEW products will be inserted here. -->
@@ -175,8 +175,8 @@
             fetchProducts();
         });
 
-        // INITIAL LOAD
-        window.onload = fetchProducts;
+        // INITIAL LOAD (If i want to auto-fetch on page load, otherwise rely on button)
+        
 
     </script>
 </body>
