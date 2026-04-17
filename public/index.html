@@ -4,169 +4,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Store Product Management</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            background-color: #f4f4f4;
-            line-height: 1.6;
-        }
-
-        h1 {
-            color: #333;
-        }
-
-        h2 {
-            color: #444;
-            border-bottom: 1px solid #ccc;
-            padding-bottom: 5px;
-        }
-
-        form {
-            background: #fff;
-            margin-bottom: 25px;
-            padding: 20px;
-            border: 1px solid #bbb;
-            border-radius: 5px;
-        }
-
-        label {
-            display: block;
-            margin: 10px 0 2px;
-            font-weight: bold;
-        }
-
-        input,
-        button {
-            margin: 5px 0;
-            padding: 10px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        button {
-            background-color: #0056b3;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        button:hover {
-            background-color: #004494;
-        }
-
-        .get-all-btn {
-            background-color: #28a745;
-        }
-
-        .get-all-btn:hover {
-            background-color: #218838;
-        }
-
-        pre {
-            background: #333;
-            color: #fff;
-            padding: 15px;
-            overflow: auto;
-            border-radius: 5px;
-        }
-
-        footer {
-            margin-top: 40px;
-            font-size: 12px;
-            color: #666;
-        }
-    </style>
+    <title>E-Commerce Inventory</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-    <h1>Store Product Management</h1>
 
-    <!-- GET ALL BUTTON -->
-    <button class="get-all-btn" id="getAllBtn">Get All Products</button>
+    <div class="container">
+        <header>
+            <h1>Store Catalogue</h1>
+            <p class="subtitle">Live inventory management powered by Node.js & MongoDB Atlas</p>
+        </header>
 
-    <h2>Add New Product</h2>
-    <form id="createProductForm">
-        <label>Store ID:</label>
-        <input type="text" id="storeId" required>
+        // PRODUCT GALLERY SECTION
+        <section>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="margin: 0;">Available Products</h2>
+                <button onclick="fetchProducts()" style="padding: 8px 15px;">Refresh Inventory</button>
+            </div>
+            <div id="productGallery" class="gallery-grid">
+                // NEW products will be inserted here.
+            </div>
+        </section>
 
-        <label>Store Name:</label>
-        <input type="text" id="storeName" required>
+        //ADMIN TOOLS SECTION (CRUD)
+        <section class="admin-section">
+            <h2 style="margin-top: 0; color: var(--primary);">Store Operations (Admin)</h2>
 
-        <label>Product ID:</label>
-        <input type="text" id="productId" required>
+            <form id="createProductForm">
+                <h3>Add New Product</h3>
+                <div class="form-group-grid">
+                    <div><label>Store ID</label><input type="text" id="storeId" required></div>
+                    <div><label>Store Name</label><input type="text" id="storeName" required></div>
+                    <div><label>Product ID</label><input type="text" id="productId" required></div>
+                    <div><label>Product Name</label><input type="text" id="productName" required></div>
+                    <div><label>Price</label><input type="number" step="0.01" id="price" required></div>
+                </div>
+                <button type="submit">Deploy to Cloud</button>
+            </form>
 
-        <label>Product Name:</label>
-        <input type="text" id="productName" required>
+            <form id="updateProductForm">
+                <h3>Update Existing Product</h3>
+                <div class="form-group-grid">
+                    <div><label>Database _id</label><input type="text" id="updateDbId" required></div>
+                    <div><label>New Name</label><input type="text" id="updateName"></div>
+                    <div><label>New Price</label><input type="number" step="0.01" id="updatePrice"></div>
+                </div>
+                <button type="submit">Update Record</button>
+            </form>
 
-        <label>Price:</label>
-        <input type="number" step="0.01" id="price" required>
+            <form id="deleteProductForm">
+                <h3>Remove Product</h3>
+                <div class="form-group-grid">
+                    <div><label>Database _id</label><input type="text" id="deleteDbId" required></div>
+                </div>
+                <button type="submit" class="btn-delete">Delete from Database</button>
+            </form>
 
-        <button type="submit">Add Product</button>
-    </form>
+            <h3>Raw API Response</h3>
+            <pre id="jsonOutput">{}</pre>
+        </section>
 
-    <h2>Fetch Product by ID</h2>
-    <form id="getProductForm">
-        <label>Database ID (_id):</label>
-        <input type="text" id="getDbId" required>
-        <button type="submit">Fetch Product</button>
-    </form>
-
-    <h2>Update Product</h2>
-    <form id="updateProductForm">
-        <label>Database ID (_id):</label>
-        <input type="text" id="updateDbId" required>
-
-        <label>New Product Name:</label>
-        <input type="text" id="updateName">
-
-        <label>New Price:</label>
-        <input type="number" step="0.01" id="updatePrice">
-
-        <button type="submit">Update Product</button>
-    </form>
-
-    <h2>Delete Product</h2>
-    <form id="deleteProductForm">
-        <label>Database ID (_id):</label>
-        <input type="text" id="deleteDbId" required>
-        <button type="submit" style="background-color: #dc3545;">Delete Product</button>
-    </form>
-
-    <h2>Response Output</h2>
-    <pre id="jsonOutput">{}</pre>
-
-    <footer>
-        <p>Disclaimer: This website is student work for demonstration of web development skills only.</p>
-    </footer>
+        <footer>
+            <p>Disclaimer: This website is student work for demonstration of web development skills only.</p>
+        </footer>
+    </div>
 
     <script>
         const output = document.getElementById('jsonOutput');
-        const apiBase = '';
+        const apiBase = ''; // Use relative path for Render deployment
 
         function showJSON(data) {
             output.textContent = JSON.stringify(data, null, 2);
         }
 
-        async function handleFetch(url, options) {
+        // MAIN FETCH FUNCTION FOR GALLERY
+        async function fetchProducts() {
             try {
-                const res = await fetch(url, options);
-                const data = await res.json();
-                showJSON(data);
+                const res = await fetch(`${apiBase}/products`);
+                const products = await res.json();
+
+                const gallery = document.getElementById('productGallery');
+                gallery.innerHTML = ''; // Clear gallery
+
+                products.forEach(p => {
+                    const card = document.createElement('div');
+                    card.className = 'product-card';
+                    card.innerHTML = `
+                    <span class="badge">${p.storeId}</span>
+                    <h3>${p.productName}</h3>
+                    <p class="price">$${p.price.toFixed(2)}</p>
+                    <div class="store-info">
+                        <strong>${p.storeName}</strong><br>
+                        Product ID: ${p.productId}
+                    </div>
+                    <div class="db-id">DB ID: ${p._id}</div>
+                `;
+                    gallery.appendChild(card);
+                });
+                showJSON(products);
             } catch (err) {
-                showJSON({ error: "Server connection failed: " + err.message });
+                console.error("Fetch error:", err);
             }
         }
 
-        // GET ALL
-        document.getElementById('getAllBtn').addEventListener('click', () => {
-            handleFetch(`${apiBase}/products`);
-        });
-
         // CREATE
-        document.getElementById('createProductForm').addEventListener('submit', e => {
+        document.getElementById('createProductForm').addEventListener('submit', async e => {
             e.preventDefault();
             const body = {
                 storeId: document.getElementById('storeId').value,
@@ -175,44 +118,45 @@
                 productName: document.getElementById('productName').value,
                 price: document.getElementById('price').value
             };
-            handleFetch(`${apiBase}/products`, {
+            const res = await fetch(`${apiBase}/products`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(body)
             });
-        });
-
-        // READ ONE
-        document.getElementById('getProductForm').addEventListener('submit', e => {
-            e.preventDefault();
-            const id = document.getElementById('getDbId').value;
-            handleFetch(`${apiBase}/products/${id}`);
+            const data = await res.json();
+            showJSON(data);
+            fetchProducts(); // Refresh gallery
         });
 
         // UPDATE
-        document.getElementById('updateProductForm').addEventListener('submit', e => {
+        document.getElementById('updateProductForm').addEventListener('submit', async e => {
             e.preventDefault();
             const id = document.getElementById('updateDbId').value;
             const body = {};
-            const name = document.getElementById('updateName').value;
-            const price = document.getElementById('updatePrice').value;
+            if (document.getElementById('updateName').value) body.productName = document.getElementById('updateName').value;
+            if (document.getElementById('updatePrice').value) body.price = document.getElementById('updatePrice').value;
 
-            if (name) body.productName = name;
-            if (price) body.price = price;
-
-            handleFetch(`${apiBase}/products/${id}`, {
+            const res = await fetch(`${apiBase}/products/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(body)
             });
+            showJSON(await res.json());
+            fetchProducts();
         });
 
-        //DELETE
-        document.getElementById('deleteProductForm').addEventListener('submit', e => {
+        // DELETE
+        document.getElementById('deleteProductForm').addEventListener('submit', async e => {
             e.preventDefault();
             const id = document.getElementById('deleteDbId').value;
-            handleFetch(`${apiBase}/products/${id}`, { method: 'DELETE' });
+            const res = await fetch(`${apiBase}/products/${id}`, { method: 'DELETE' });
+            showJSON(await res.json());
+            fetchProducts();
         });
+
+        // INITIAL LOAD
+        window.onload = fetchProducts;
+
     </script>
 </body>
 
