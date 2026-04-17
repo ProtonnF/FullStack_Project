@@ -48,7 +48,7 @@
                 <div class="form-group-grid">
                     <div><label>Database _id</label><input type="text" id="getDbId" required></div>
                 </div>
-                <button type="submit" style="background-color: #64748b;">Fetch Product</button>
+                <button type="submit">Fetch Product</button>
             </form>
 
             <form id="updateProductForm">
@@ -143,7 +143,7 @@
             try {
                 const res = await fetch(`${apiBase}/products/${id}`);
                 const data = await res.json();
-                showJSON(data); // This shows just the one product in the JSON box
+                showJSON(data);
             } catch (err) {
                 showJSON({ error: "Product not found or invalid ID" });
             }
